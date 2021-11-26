@@ -27,14 +27,25 @@ while (minesArray.length < minesMax) {
     console.log(randomCellId);
     let tableCell = minesweeperTable.querySelector(randomCellId);
     if (!tableCell.classList.contains("mined"))
+    {
         tableCell.classList.add("mined");
-    minesArray.push(randomCellId);
+        minesArray.push(randomCellId);
+    }
 }
 
 /* minesweeperButton click event */
 let minesweeperButtons = minesweeperTable.querySelectorAll('.minesweeper-button');
 minesweeperButtons.forEach(minesweeperButton => {
     minesweeperButton.addEventListener("click", function() {
+        let buttonParentCell = minesweeperButton.parentNode;
+        if (buttonParentCell.classList.contains("mined"))
+        {
+            buttonParentCell.classList.add("opened");
+            let minedCells = minesweeperTable.querySelectorAll('.mined');
+            minedCells.forEach(minedCell => {
+                minedCell.removeChild(minedCell.firstChild);
+            });  
+        }
         this.remove();
     });
 });

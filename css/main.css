@@ -12,6 +12,9 @@
     background-image: url('../icons/mine.png');
     background-size: contain;
 }
+.opened {
+    background-color: red;
+}
 .minesweeper-button {
     border-radius: 0;
     width: 60px;
