@@ -1,2 +1,2 @@
-# minesweeper
-Minesweeper / Javascript game
+# Minesweeper
+Javascript game
