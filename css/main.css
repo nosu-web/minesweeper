@@ -12,7 +12,7 @@
     background-image: url('../icons/mine.png');
     background-size: contain;
 }
-.opened {
+.exploded {
     background-color: red;
 }
 .minesweeper-button {

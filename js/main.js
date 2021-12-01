@@ -1,50 +1,76 @@
-const minesweeperTable = document.querySelector('.minesweeper');
-let tableRows = 8;
-let tableCols = 8;
-let minesMax = 10;
+/**
+ * Game config
+ */
+const tableRows = 8;
+const tableCols = 8;
+const minesMax = 20;
 
-/* Table rows */
-for(let i=1; i<=tableRows; i++) {
+const minesweeperTable = document.querySelector('.minesweeper');
+
+/**
+ * Game matrix
+ */
+let gameMatrix = new Array();
+
+/**
+ * Generate minesweeper table
+ */
+for (let i = 0; i < tableRows; i++) {
     let tableRow = document.createElement("tr");
     minesweeperTable.appendChild(tableRow);
+    gameMatrix[i] = [];
 
-    /* Table columns */
-    for(let j=1; j<=tableCols; j++) {
+    for (let j = 0; j < tableCols; j++) {
+        gameMatrix[i][j] = 0;
         let tableCell = document.createElement("td");
         let tableCellButton = document.createElement("button");
         tableCell.classList.add("minesweeper-cell");
-        tableCell.id = ('cell-' + i + j);
+        tableCell.dataset.row = i;
+        tableCell.dataset.col = j;
 
         tableCellButton.classList.add("minesweeper-button");
         tableRow.appendChild(tableCell);
         tableCell.appendChild(tableCellButton);
     }
 }
-/* Generate random mines */
-let minesArray = new Array();
-while (minesArray.length < minesMax) {
-    let randomCellId = '#cell-'+ Math.floor(1 + Math.random() * (tableRows)) + Math.floor(1 + Math.random() * (tableCols));
-    console.log(randomCellId);
-    let tableCell = minesweeperTable.querySelector(randomCellId);
-    if (!tableCell.classList.contains("mined"))
-    {
-        tableCell.classList.add("mined");
-        minesArray.push(randomCellId);
+
+
+/**
+ * Generate random mines
+ */
+for (let i = 0; i < minesMax; i++) {
+    let randomRow = Math.floor(Math.random() * tableRows);
+    let randomCol = Math.floor(Math.random() * tableCols);
+    if (gameMatrix[randomRow][randomCol] > -1) {
+        gameMatrix[randomRow][randomCol] = -1;
     }
+    else
+        i--;
 }
 
-/* minesweeperButton click event */
-let minesweeperButtons = minesweeperTable.querySelectorAll('.minesweeper-button');
-minesweeperButtons.forEach(minesweeperButton => {
-    minesweeperButton.addEventListener("click", function() {
-        let buttonParentCell = minesweeperButton.parentNode;
-        if (buttonParentCell.classList.contains("mined"))
-        {
-            buttonParentCell.classList.add("opened");
-            let minedCells = minesweeperTable.querySelectorAll('.mined');
-            minedCells.forEach(minedCell => {
-                minedCell.removeChild(minedCell.firstChild);
-            });  
+/** 
+ * Button click event
+ */
+minesweeperTable.querySelectorAll('.minesweeper-button').forEach(minesweeperButton => {
+    minesweeperButton.addEventListener("click", function () {
+
+        let currentCell = minesweeperButton.parentNode;
+        let row = currentCell.dataset.row;
+        let col = currentCell.dataset.col;
+
+        /* Check cell for mine */
+        if(gameMatrix[row][col] < 0) {
+            currentCell.classList.add("mined");
+            currentCell.classList.add("exploded");
+            for (let i = 0; i < tableRows; i++) {
+                for (let j = 0; j < tableRows; j++) {
+                    if(gameMatrix[i][j] < 0) {
+                        let minedCell = minesweeperTable.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+                        minedCell.classList.add("mined");
+                        minedCell.removeChild(minedCell.firstChild);
+                    }
+                }
+            }
         }
         this.remove();
     });
