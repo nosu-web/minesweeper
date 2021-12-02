@@ -1,9 +1,9 @@
 /**
  * Game config
  */
-const tableRows = 8;
-const tableCols = 8;
-const minesMax = 20;
+const tableRows = 9;
+const tableCols = 9;
+const minesMax = 10;
 
 const minesweeperTable = document.querySelector('.minesweeper');
 
