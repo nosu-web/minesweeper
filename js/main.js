@@ -3,7 +3,12 @@
  */
 const tableRows = 9;
 const tableCols = 9;
-const minesMax = 10;
+
+let minesMax = 1;
+minesMaxField = document.querySelector('#minesMax');
+minesMaxField.addEventListener("input", function () {
+    minesMax = this.value;
+});
 
 const minesweeperTable = document.querySelector('.minesweeper');
 
