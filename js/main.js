@@ -53,26 +53,29 @@ for (let i = 0; i < minesMax; i++) {
  */
 minesweeperTable.querySelectorAll('.minesweeper-button').forEach(minesweeperButton => {
     minesweeperButton.addEventListener("click", function () {
+        let currentButton = this;
+        if(currentButton.classList.contains("flag") == false)
+        {
+            let currentCell = minesweeperButton.parentNode;
+            let row = currentCell.dataset.row;
+            let col = currentCell.dataset.col;
 
-        let currentCell = minesweeperButton.parentNode;
-        let row = currentCell.dataset.row;
-        let col = currentCell.dataset.col;
-
-        /* Check cell for mine */
-        if(gameMatrix[row][col] < 0) {
-            currentCell.classList.add("mined");
-            currentCell.classList.add("exploded");
-            for (let i = 0; i < tableRows; i++) {
-                for (let j = 0; j < tableRows; j++) {
-                    if(gameMatrix[i][j] < 0) {
-                        let minedCell = minesweeperTable.querySelector(`[data-row="${i}"][data-col="${j}"]`);
-                        minedCell.classList.add("mined");
-                        minedCell.removeChild(minedCell.firstChild);
+            /* Check cell for mine */
+            if(gameMatrix[row][col] < 0) {
+                currentCell.classList.add("mined");
+                currentCell.classList.add("exploded");
+                for (let i = 0; i < tableRows; i++) {
+                    for (let j = 0; j < tableRows; j++) {
+                        if(gameMatrix[i][j] < 0) {
+                            let minedCell = minesweeperTable.querySelector(`[data-row="${i}"][data-col="${j}"]`);
+                            minedCell.classList.add("mined");
+                            minedCell.removeChild(minedCell.firstChild);
+                        }
                     }
                 }
             }
+            this.remove();
         }
-        this.remove();
     });
     minesweeperButton.addEventListener("contextmenu", function (event) {
         let currentButton = this;
