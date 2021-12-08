@@ -1,7 +1,10 @@
+*, *::after {
+    box-sizing: border-box;
+}
 .minesweeper {
     margin: auto;
-    border-spacing: 0;
     border-collapse: collapse;
+    border-spacing: 0px;
 }
 .minesweeper-cell {
     padding: 0;
@@ -12,10 +15,16 @@
     background-image: url('../icons/mine.png');
     background-size: contain;
 }
+.flag {
+    background-image: url('../icons/flag.png');
+    background-size: contain;
+}
 .exploded {
     background-color: red;
 }
 .minesweeper-button {
+    border: 1px solid black;
+    border-radius: 0px;
     width: 60px;
     height: 60px;
 }

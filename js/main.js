@@ -74,4 +74,13 @@ minesweeperTable.querySelectorAll('.minesweeper-button').forEach(minesweeperButt
         }
         this.remove();
     });
+    minesweeperButton.addEventListener("contextmenu", function (event) {
+        let currentButton = this;
+        event.preventDefault();
+        
+        if(currentButton.classList.contains("flag"))
+            currentButton.classList.remove("flag");
+        else
+            currentButton.classList.add("flag");
+    });
 });
