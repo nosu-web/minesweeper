@@ -10,6 +10,8 @@
     padding: 0;
     width: 60px;
     height: 60px;
+    font-size: 2em;
+    text-align: center;
 }
 .mined {
     background-image: url('../icons/mine.png');

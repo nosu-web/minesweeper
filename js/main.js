@@ -53,6 +53,31 @@ for (let i = 0; i < minesMax; i++) {
         i--;
 }
 
+/**
+ * Generate numbers
+ */
+function CountMines(x, y){
+    let count = 0;
+    for(let i = -1; i < 2; i++){
+        for(let j = -1; j < 2; j++){
+            try{
+                if(gameMatrix[x+i][y+j]==-1)
+                    count++;
+            }
+            catch{}
+        }
+    }
+    return count;
+}
+
+for(let i = 0; i < tableRows; i++){
+    for(let j = 0; j < tableCols; j++){
+        if(gameMatrix[i][j] != -1){
+            gameMatrix[i][j] = CountMines(i, j);
+        }
+    }
+}
+
 /** 
  * Button click event
  */
@@ -78,6 +103,9 @@ minesweeperTable.querySelectorAll('.minesweeper-button').forEach(minesweeperButt
                         }
                     }
                 }
+            }
+            if(gameMatrix[row][col] > 0) {
+                currentCell.innerHTML = gameMatrix[row][col];
             }
             this.remove();
         }
