@@ -30,3 +30,27 @@
     width: 60px;
     height: 60px;
 }
+.toolbox__button__start {
+    border-radius: 5px;
+}
+.input {
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+}
+.input .input__rows {
+    margin-top: 5px;
+    height: 25px;
+}
+.input .input__cols {
+    margin-top: 5px;
+    height: 25px;
+}
+.input .input__text__rows {
+    margin: 0px;
+    padding-top: 5px;
+}
+.input .input__text__cols {
+    margin: 0px;
+    padding-top: 5px;
+}
