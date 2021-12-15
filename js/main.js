@@ -36,7 +36,7 @@ function gameInit(gameLevel) {
             minesMax = 30;
             break;
     }
-    console.log(tableRows, tableCols);
+    
     for (let i = 0; i < tableRows; i++) {
         let tableRow = document.createElement("tr");
         minesweeperTable.appendChild(tableRow);
