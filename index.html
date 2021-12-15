@@ -9,7 +9,14 @@
 </head>
 <body>
     <div class="toolbox">
-        <input type="range" id="minesMax" name="minesMax" min="1" max="100">
+        <input type="range" id="minesMax" name="minesMax" min="1" max="30">
+    </div>
+    <div class="size">
+        <input type="number" id="fieldHeight" name="fieldHeight" min="2" max="100">
+        <input type="number" id="fieldWidth" name="fieldWidth" min="2" max="100">
+    </div>
+    <div class="start">
+        <button class="startBtn" id="startBtn">Start</button>
     </div>
     <table class="minesweeper"></table>
     <script src="js/main.js"></script>
