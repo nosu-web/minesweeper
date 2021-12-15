@@ -30,3 +30,28 @@
     width: 60px;
     height: 60px;
 }
+.labelMinesMax {
+    font-size: 20px;
+    margin: 0px 10px;
+    text-align: center;
+}
+.toolbox {
+    display: flex;   
+    width: 20%;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.minesMax {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+}
+input {
+    margin: 2px;
+    height: 20px;
+    width: 100px;
+} 
+.buttonStart
+{
+ width: 120px;
+}
