@@ -7,15 +7,12 @@
     border-spacing: 0px;
 }
 .minesweeper-cell {
+    font-size: 16px;
+    line-height: 0;
     height: 30px;
     width: 30px;
     padding: 0;
-    border: 1px solid;
-    background-color: #C0C0C0;
-    border-top-color: #ffffff;
-    border-right-color: #7B7B7B;
-    border-bottom-color: #7B7B7B;
-    border-left-color: #ffffff;
+    border: 1px solid gray;
     text-align: center;
     
 }
