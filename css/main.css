@@ -7,12 +7,11 @@
     border-spacing: 0px;
 }
 .minesweeper-cell {
-    padding: 0px;
-    font-size:2em;
+    padding: 0;
     width: 60px;
-    height: 60px;    
+    height: 60px;
+    font-size: 2em;
     text-align: center;
-    line-height: 0px;
 }
 .mined {
     background-image: url('../icons/mine.png');
@@ -30,25 +29,4 @@
     border-radius: 0px;
     width: 60px;
     height: 60px;
-}
-.labelMinesMax {
-    font-size: 1.2em;
-    margin: 0px 10px;
-    text-align: center;
-}
-.toolbox {
-    display: flex;   
-    width: 20%;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-.minesMax {
-    display: flex;
-    flex-direction: row;
-    margin: 0;
-}
-input {
-    margin: 2px;
-    height: 20px;
 }
