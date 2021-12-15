@@ -1,62 +1,85 @@
 /**
- * Game config
+ * Game field
  */
-const tableRows = 9;
-const tableCols = 9;
-
-let minesMax = 1;
-minesMaxField = document.querySelector('#minesMax');
-minesMaxField.addEventListener("input", function () {
-    minesMax = this.value;
-});
-
 const minesweeperTable = document.querySelector('.minesweeper');
 
 /**
- * Game matrix
+ * Game start event
  */
-let gameMatrix = new Array();
+gameStartField = document.querySelector('#gameStart');
+gameStartField.addEventListener("click", function () {
+    gameLevel = parseInt(document.querySelector('#gameLevel').value);
+
+    gameInit(gameLevel);
+});
 
 /**
  * Generate minesweeper table
  */
-for (let i = 0; i < tableRows; i++) {
-    let tableRow = document.createElement("tr");
-    minesweeperTable.appendChild(tableRow);
-    gameMatrix[i] = [];
+let gameMatrix = new Array();
 
-    for (let j = 0; j < tableCols; j++) {
-        gameMatrix[i][j] = 0;
-        let tableCell = document.createElement("td");
-        let tableCellButton = document.createElement("button");
-        tableCell.classList.add("minesweeper-cell");
-        tableCell.dataset.row = i;
-        tableCell.dataset.col = j;
+function gameInit(gameLevel) {
+    minesweeperTable.innerHTML = "";
 
-        tableCellButton.classList.add("minesweeper-button");
-        tableRow.appendChild(tableCell);
-        tableCell.appendChild(tableCellButton);
+    switch (gameLevel) {
+        case 2:
+            console.log(gameLevel);
+            tableRows = tableCols = 16;
+            minesMax = 10;
+            break;
+        case 3:
+            tableRows = 16;
+            tableCols = 32;
+            minesMax = 20;
+            break;
+        default:
+            tableRows = tableCols = 8;
+            minesMax = 30;
+            break;
     }
+    console.log(tableRows, tableCols);
+    for (let i = 0; i < tableRows; i++) {
+        let tableRow = document.createElement("tr");
+        minesweeperTable.appendChild(tableRow);
+        gameMatrix[i] = [];
+
+        for (let j = 0; j < tableCols; j++) {
+            gameMatrix[i][j] = 0;
+            let tableCell = document.createElement("td");
+            let tableCellButton = document.createElement("button");
+            tableCell.classList.add("minesweeper-cell");
+            tableCell.dataset.row = i;
+            tableCell.dataset.col = j;
+
+            tableCellButton.classList.add("minesweeper-button");
+            tableRow.appendChild(tableCell);
+            tableCell.appendChild(tableCellButton);
+        }
+    }
+    generateMines(minesMax);
+    generateNumbers();
 }
 
 
 /**
  * Generate random mines
  */
-for (let i = 0; i < minesMax; i++) {
-    let randomRow = Math.floor(Math.random() * tableRows);
-    let randomCol = Math.floor(Math.random() * tableCols);
-    if (gameMatrix[randomRow][randomCol] > -1) {
-        gameMatrix[randomRow][randomCol] = -1;
+function generateMines(minesMax) {
+    for (let i = 0; i < minesMax; i++) {
+        let randomRow = Math.floor(Math.random() * tableRows);
+        let randomCol = Math.floor(Math.random() * tableCols);
+        if (gameMatrix[randomRow][randomCol] > -1) {
+            gameMatrix[randomRow][randomCol] = -1;
+        }
+        else
+            i--;
     }
-    else
-        i--;
 }
 
 /**
  * Generate numbers
  */
-function CountMines(x, y){
+function countMines(x, y) {
     let count = 0;
     for(let i = -1; i < 2; i++){
         for(let j = -1; j < 2; j++){
@@ -70,10 +93,15 @@ function CountMines(x, y){
     return count;
 }
 
-for(let i = 0; i < tableRows; i++){
-    for(let j = 0; j < tableCols; j++){
-        if(gameMatrix[i][j] != -1){
-            gameMatrix[i][j] = CountMines(i, j);
+/**
+ * Generate numbers
+ */
+function generateNumbers() {
+    for(let i = 0; i < tableRows; i++){
+        for(let j = 0; j < tableCols; j++){
+            if(gameMatrix[i][j] != -1){
+                gameMatrix[i][j] = countMines(i, j);
+            }
         }
     }
 }

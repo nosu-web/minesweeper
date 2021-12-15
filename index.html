@@ -9,7 +9,9 @@
 </head>
 <body>
     <div class="toolbox">
-        <input type="range" id="minesMax" name="minesMax" min="1" max="100">
+        <label>Level</label>
+        <input type="range" id="gameLevel" value="1" step="1" min="1" max="3">
+        <button id="gameStart">Start</button>
     </div>
     <table class="minesweeper"></table>
     <script src="js/main.js"></script>
