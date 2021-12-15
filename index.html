@@ -9,9 +9,24 @@
 </head>
 <body>
     <div class="toolbox">
-        <input type="range" id="minesMax" name="minesMax" min="1" max="100">
+        <input type="range" id="minesMax" step="1" name="minesMax"  min="1" max="30">
     </div>
-    <table class="minesweeper"></table>
+    
+    <div class="gameSettings">
+        
+            <b>Rows count:</b>
+            <div><input class="inputRows" id="inputRows" type="number" min="1" max="10" value="5" size="40"></div>
+            <b>Columns count:</b>
+            <div><input class="inputColmns" id="inputColumns" type="number"min="1" max="10" value="5" size="40"> </div>
+            <b>Mines count:</b>
+            <div><input class="inputMines" id="inputMines" type="number"min="1" max="100" value="2"  size="40"> </div>
+
+    </div>
+    <div><button class="startGame" id="startGame">Start the game</button></div>
+    <div><button class="resetField" id="resetField">Reset the field</button></div>
+    <table class="minesweeper">
+        <caption class="caption">Flex</caption>
+    </table>
     <script src="js/main.js"></script>
 </body>
 </html>
