@@ -9,9 +9,15 @@
 </head>
 <body>
     <div class="toolbox">
-        <input type="range" id="minesMax" name="minesMax" min="1" max="100">
+        <div class = "minesMax">
+            <input type="range" id="rangeMinesMax" name="rangeMinesMax" min="1" max="30" oninput="SetMinesMax()">
+            <p class = "labelMinesMax" id = "labelMinesMax"></p>
+        </div>
+        <input type="number"  name="toolboxRows" id="toolboxRows">
+        <input type="number"  name="toolboxCols" id="toolboxCols">
+        <button class="buttonStart" id="buttonStart" onclick="Start()">Start</button>
     </div>
-    <table class="minesweeper"></table>
+    <table class="minesweeper" id = "gameTable"></table>
     <script src="js/main.js"></script>
 </body>
 </html>
