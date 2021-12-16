@@ -16,6 +16,7 @@ gameStartField.addEventListener("click", function () {
  * Generate minesweeper table
  */
 let gameMatrix = new Array();
+let use = new Array();
 
 function gameInit(gameLevel) {
     minesweeperTable.innerHTML = "";
@@ -26,7 +27,7 @@ function gameInit(gameLevel) {
             tableRows = tableCols = 16;
             minesMax = 20;
             break;
-        case 3:
+        case 3:            
             tableRows = 16;
             tableCols = 32;
             minesMax = 30;
@@ -36,14 +37,14 @@ function gameInit(gameLevel) {
             minesMax = 10;
             break;
     }
-    
     for (let i = 0; i < tableRows; i++) {
         let tableRow = document.createElement("tr");
         minesweeperTable.appendChild(tableRow);
         gameMatrix[i] = [];
-
+        use[i] = [];
         for (let j = 0; j < tableCols; j++) {
             gameMatrix[i][j] = 0;
+            use[i][j] = 0;
             let tableCell = document.createElement("td");
             let tableCellButton = document.createElement("button");
             tableCell.classList.add("minesweeper-cell");
@@ -55,6 +56,7 @@ function gameInit(gameLevel) {
             tableCell.appendChild(tableCellButton);
         }
     }
+    
     generateMines(minesMax);
     generateNumbers();
     buttonListener();
@@ -134,8 +136,12 @@ function buttonListener() {
                         }
                     }
                 }
-                if(gameMatrix[row][col] > 0) {
+                else if(gameMatrix[row][col] > 0) {
                     currentCell.innerHTML = gameMatrix[row][col];
+                    use[row][col] =1;
+                }
+                else{
+                    CheckEmptyCells(row, col);
                 }
                 this.remove();
             }
@@ -150,4 +156,39 @@ function buttonListener() {
                 currentButton.classList.add("flag");
         });
     });
+}
+
+function CheckEmptyCells(xxx, yyy){
+    let xx = Number(xxx);
+    let yy = Number(yyy); 
+    var emptyCells = new Set();   
+    emptyCells.add({a: xx, b: yy})   
+    while(emptyCells.size!=0)
+    {
+        var newEmptyCells = new Set();
+        for (let cell of emptyCells){        
+            let x = Number(cell.a);
+            let y = Number(cell.b);       
+            for (let i = -1; i < 2; i++) {
+                for (let j = -1; j < 2; j++) {
+                    if (x+i>=0 && x+i<tableRows && y+j>=0 && y+j<tableCols) {  
+                        if(use[x+i][y+j]!=1) {
+                            adjacentCell = minesweeperTable.querySelector(`[data-row="${x+i}"][data-col="${y+j}"]`);
+                            
+                                use[x+i][y+j]=1;
+                                if(gameMatrix[x+i][y+j]==0){
+                                    newEmptyCells.add({a: x+i, b: y+j})
+                                }
+                                else{                        
+                                    adjacentCell.innerHTML += gameMatrix[x+i][y+j];                                                 
+                                }
+                                adjacentCell.removeChild(adjacentCell.firstChild);      
+                               
+                        }    
+                    }
+                }
+            }           
+        }
+        emptyCells = newEmptyCells;
+    }
 }
