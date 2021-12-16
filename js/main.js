@@ -120,6 +120,7 @@ function buttonListener() {
                 let col = currentCell.dataset.col;
 
                 /* Check cell for mine */
+                this.remove();
                 if(gameMatrix[row][col] < 0) {
                     currentCell.classList.add("mined");
                     currentCell.classList.add("exploded");
@@ -133,13 +134,12 @@ function buttonListener() {
                         }
                     }
                 }
-                if(gameMatrix[row][col] > 0) {
+                else if(gameMatrix[row][col] > 0) {
                     currentCell.innerHTML = gameMatrix[row][col];
                 }
                 else {
-                    WaveAlgorithm(row, col);
+                    WaveAlgorithm(Number(row), Number(col));
                 }
-                this.remove();
             }
         });
         minesweeperButton.addEventListener("contextmenu", function (event) {
@@ -155,27 +155,74 @@ function buttonListener() {
 }
 
 function WaveAlgorithm(x1, y1) {
-    let OldFront = [];
-    let NewFront = [];
-    let e = {x: x1, y : y1};
-    OldFront.push(e);
+    let 
+        r = 0,
+        c = 0,
+        OldFront = [],
+        NewFront = [],
+        Visited = [];
+        allDirections = [ {dx: 1, dy: 0}, {dx: -1, dy: 0}, {dx: 0, dy: 1}, {dx: 0, dy: -1} ],
+        s = {x: x1, y: y1};
+
+    OldFront.push(s);
+    Visited = Visited.concat(OldFront);
+    let t = 0;
     while(true)
     {
         NewFront = [];
         for(let i = 0; i < OldFront.length; i++)
         {
-            let row = OldFront[i].x;
-            let col = OldFront[i].y;
-            if (gameMatrix[row + 1, col] == 0) {
-                let n = {x: row + 1, y: col};
-                Cell = minesweeperTable.querySelector(`[data-row="${row + 1}"][data-col="${col}"]`);
-                Cell.removeChild(Cell.firstChild);
-                NewFront.push(n);
+            console.log(OldFront[i].x, OldFront[i].y);
+            row = Number(OldFront[i].x);
+            col = Number(OldFront[i].y);
+            for(let k = 0; k < allDirections.length; k++) {
+                let dx = Number(row + allDirections[k].dx);
+                let dy = Number(col + allDirections[k].dy);
+                if (dx >= 0 && dx < tableRows && dy >= 0 && dy < tableCols && !Contains(Visited, dx, dy)) {
+                    let n = CheckCell(dx, dy);
+                    Visited.push({x: dx, y: dy});
+                    if(n != null) {
+                        NewFront.push(n);
+                    }
+                }
             }
         }
-        OldFront = NewFront;
         if (NewFront.length == 0) {
+            console.log("gg");
             break; 
         }
+        OldFront = [].concat(NewFront);
+        console.log("Vis:", Visited);
+        t++;
+        if (t > 2) {
+            break;
+        }
     }
+}
+
+function CheckCell(dx, dy) {
+    console.log(dx, dy);
+    let cell = minesweeperTable.querySelector(`[data-row="${dx}"][data-col="${dy}"]`);
+    let val = gameMatrix[dx][dy];
+    if (val == 0) {
+        try{
+            cell.removeChild(cell.firstChild);
+        }
+        catch{}
+        return {x: dx, y: dy};
+    }
+    try{
+        cell.removeChild(cell.firstChild);
+        cell.innerHTML = val;
+    }
+    catch{}
+}
+
+function Contains(arr, x, y) {
+    for(let i = 0; i < arr.length; i++) {
+        if (arr[i].dx == x && arr[i].dy == y) {
+            return true;
+        }
+    }
+    return false;
 }
