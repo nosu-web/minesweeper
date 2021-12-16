@@ -17,6 +17,7 @@ gameStartField.addEventListener("click", function () {
  */
 let gameMatrix = new Array();
 
+
 function gameInit(gameLevel) {
     minesweeperTable.innerHTML = "";
 
@@ -24,26 +25,28 @@ function gameInit(gameLevel) {
         case 2:
             console.log(gameLevel);
             tableRows = tableCols = 16;
-            minesMax = 10;
-            break;
-        case 3:
-            tableRows = 16;
-            tableCols = 32;
             minesMax = 20;
             break;
+        case 3:
+            console.log("xiy1");
+            tableRows = 16;
+            tableCols = 32;
+            minesMax = 100;
+            break;
         default:
+            console.log("xiy");
             tableRows = tableCols = 8;
-            minesMax = 30;
+            minesMax = 10;
             break;
     }
-    
     for (let i = 0; i < tableRows; i++) {
         let tableRow = document.createElement("tr");
         minesweeperTable.appendChild(tableRow);
         gameMatrix[i] = [];
-
+        
         for (let j = 0; j < tableCols; j++) {
             gameMatrix[i][j] = 0;
+            
             let tableCell = document.createElement("td");
             let tableCellButton = document.createElement("button");
             tableCell.classList.add("minesweeper-cell");
@@ -55,6 +58,7 @@ function gameInit(gameLevel) {
             tableCell.appendChild(tableCellButton);
         }
     }
+    
     generateMines(minesMax);
     generateNumbers();
     buttonListener();
@@ -124,7 +128,7 @@ function buttonListener() {
                     currentCell.classList.add("mined");
                     currentCell.classList.add("exploded");
                     for (let i = 0; i < tableRows; i++) {
-                        for (let j = 0; j < tableRows; j++) {
+                        for (let j = 0; j < tableCols; j++) {
                             if(gameMatrix[i][j] < 0) {
                                 let minedCell = minesweeperTable.querySelector(`[data-row="${i}"][data-col="${j}"]`);
                                 minedCell.classList.add("mined");
@@ -133,8 +137,12 @@ function buttonListener() {
                         }
                     }
                 }
-                if(gameMatrix[row][col] > 0) {
+                else if(gameMatrix[row][col] > 0) {
                     currentCell.innerHTML = gameMatrix[row][col];
+                }
+                else{
+                    console.log("Empty");
+                    CheckEmptyCells(row, col);
                 }
                 this.remove();
             }
@@ -149,4 +157,52 @@ function buttonListener() {
                 currentButton.classList.add("flag");
         });
     });
+}
+
+function CheckEmptyCells(xx, yy){
+    let xuiuse = new Array();
+    for(let i = 0; i < tableRows; i++){
+        xuiuse[i] = [];
+        for(let j = 0; j < tableCols; j++){
+            xuiuse[i][j] = 0;
+        }
+    }
+    xuiuse[xx][yy] = 1;
+    var emptyCells = new Set();
+    var newEmptyCells = new Set();
+    emptyCells.add({a: xx, b: yy})
+    for (let item of emptyCells){
+        console.log(item);
+    } 
+    /**/
+    while(emptyCells.count!=0)
+    {
+        for (let cell of emptyCells){ 
+            for (let item of emptyCells){
+                console.log(item);
+            }  
+            let x = cell.x;
+            let y = cell.y;        
+            for (let i = -1; i < 2; i++) {
+                for (let j = -1; j < 2; j++) {
+                    if (x+i>0 && x+i<tableRows && y+j>0 && y+i<tableCols) {  
+                        adjacentCell = minesweeperTable.querySelector(`[data-row="${x+i}"][data-col="${y+j}"]`);  
+                        if(!(i==0 && j==0)){                   
+                            if (use[x+i][y+j]!=1){                   
+                                use[x+i][y+j]=1;
+                                if(gameMatrix[x+i][y+j]==0){
+                                    newEmptyCells.add({a: x+i, b: y+j})
+                                }
+                                else{                        
+                                    adjacentCell.innerHTML = gameMatrix[x+i][y+j];                                                 
+                                }
+                            }                        
+                        }
+                        adjacentCell.removeChild(adjacentCell.firstChild); 
+                    }
+                }
+            }           
+        }
+        emptyCells = newEmptyCells;
+    }
 }
