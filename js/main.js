@@ -24,16 +24,16 @@ function gameInit(gameLevel) {
         case 2:
             console.log(gameLevel);
             tableRows = tableCols = 16;
-            minesMax = 10;
+            minesMax = 20;
             break;
         case 3:
             tableRows = 16;
             tableCols = 32;
-            minesMax = 20;
+            minesMax = 30;
             break;
         default:
-            tableRows = tableCols = 8;
-            minesMax = 30;
+            tableRows = tableCols = 9;
+            minesMax = 10;
             break;
     }
     
@@ -124,7 +124,7 @@ function buttonListener() {
                     currentCell.classList.add("mined");
                     currentCell.classList.add("exploded");
                     for (let i = 0; i < tableRows; i++) {
-                        for (let j = 0; j < tableRows; j++) {
+                        for (let j = 0; j < tableCols; j++) {
                             if(gameMatrix[i][j] < 0) {
                                 let minedCell = minesweeperTable.querySelector(`[data-row="${i}"][data-col="${j}"]`);
                                 minedCell.classList.add("mined");
@@ -135,6 +135,9 @@ function buttonListener() {
                 }
                 if(gameMatrix[row][col] > 0) {
                     currentCell.innerHTML = gameMatrix[row][col];
+                }
+                else {
+                    WaveAlgorithm(row, col);
                 }
                 this.remove();
             }
@@ -149,4 +152,30 @@ function buttonListener() {
                 currentButton.classList.add("flag");
         });
     });
+}
+
+function WaveAlgorithm(x1, y1) {
+    let OldFront = [];
+    let NewFront = [];
+    let e = {x: x1, y : y1};
+    OldFront.push(e);
+    while(true)
+    {
+        NewFront = [];
+        for(let i = 0; i < OldFront.length; i++)
+        {
+            let row = OldFront[i].x;
+            let col = OldFront[i].y;
+            if (gameMatrix[row + 1, col] == 0) {
+                let n = {x: row + 1, y: col};
+                Cell = minesweeperTable.querySelector(`[data-row="${row + 1}"][data-col="${col}"]`);
+                Cell.removeChild(Cell.firstChild);
+                NewFront.push(n);
+            }
+        }
+        OldFront = NewFront;
+        if (NewFront.length == 0) {
+            break; 
+        }
+    }
 }
