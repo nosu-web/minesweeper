@@ -16,6 +16,7 @@ gameStartField.addEventListener("click", function () {
  * Generate minesweeper table
  */
 let gameMatrix = new Array();
+var checkedCells = new Set();
 
 function gameInit(gameLevel) {
     minesweeperTable.innerHTML = "";
@@ -106,6 +107,36 @@ function generateNumbers() {
     }
 }
 
+function DeleteEmptyCells(row, col){
+    row = parseInt(row);
+    col = parseInt(col);
+    let cell = [row, col];
+    if(checkedCells.has(cell))
+    {
+        return;
+    }
+    else 
+    {
+        checkedCells.add(cell);
+        let currentCell = minesweeperTable.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+        currentCell.removeChild(currentCell.firstChild);
+        if(gameMatrix[row][col] > 0){
+            currentCell.innerHTML+=gameMatrix[row][col];
+            return;
+        }
+        else{
+            for(let i = -1; i < 2; i++){
+                for(let j = -1; j < 2; j++){
+                    try{
+                        DeleteEmptyCells(row+i, col+j);
+                    }
+                    catch{}
+                }
+            }
+        }
+    }
+}
+
 /** 
  * Button click event
  */
@@ -136,6 +167,9 @@ function buttonListener() {
                 }
                 if(gameMatrix[row][col] > 0) {
                     currentCell.innerHTML = gameMatrix[row][col];
+                }
+                if(gameMatrix[row][col] == 0){
+                    DeleteEmptyCells(row, col);
                 }
                 this.remove();
             }
