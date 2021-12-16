@@ -141,7 +141,6 @@ function buttonListener() {
                     use[row][col] =1;
                 }
                 else{
-                    console.log("Empty");
                     CheckEmptyCells(row, col);
                 }
                 this.remove();
@@ -159,7 +158,7 @@ function buttonListener() {
     });
 }
 
-function CheckEmptyCells(xxx, yxy){
+function CheckEmptyCells(xxx, yyy){
     let xx = Number(xxx);
     let yy = Number(yyy); 
     var emptyCells = new Set();   
@@ -172,7 +171,7 @@ function CheckEmptyCells(xxx, yxy){
             let y = Number(cell.b);       
             for (let i = -1; i < 2; i++) {
                 for (let j = -1; j < 2; j++) {
-                    if (x+i>=0 && x+i<tableRows && y+j>=0 && y+i<tableCols) {  
+                    if (x+i>=0 && x+i<tableRows && y+j>=0 && y+j<tableCols) {  
                         if(use[x+i][y+j]!=1) {
                             adjacentCell = minesweeperTable.querySelector(`[data-row="${x+i}"][data-col="${y+j}"]`);
                             
