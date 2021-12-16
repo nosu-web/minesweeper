@@ -24,16 +24,16 @@ function gameInit(gameLevel) {
         case 2:
             console.log(gameLevel);
             tableRows = tableCols = 16;
-            minesMax = 10;
+            minesMax = 20;
             break;
         case 3:
             tableRows = 16;
             tableCols = 32;
-            minesMax = 20;
+            minesMax = 30;
             break;
         default:
-            tableRows = tableCols = 8;
-            minesMax = 30;
+            tableRows = tableCols = 9;
+            minesMax = 10;
             break;
     }
     
@@ -118,13 +118,14 @@ function buttonListener() {
                 let currentCell = minesweeperButton.parentNode;
                 let row = currentCell.dataset.row;
                 let col = currentCell.dataset.col;
+                console.log(row, col);
 
                 /* Check cell for mine */
                 if(gameMatrix[row][col] < 0) {
                     currentCell.classList.add("mined");
                     currentCell.classList.add("exploded");
                     for (let i = 0; i < tableRows; i++) {
-                        for (let j = 0; j < tableRows; j++) {
+                        for (let j = 0; j < tableCols; j++) {
                             if(gameMatrix[i][j] < 0) {
                                 let minedCell = minesweeperTable.querySelector(`[data-row="${i}"][data-col="${j}"]`);
                                 minedCell.classList.add("mined");
