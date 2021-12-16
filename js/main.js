@@ -15,6 +15,7 @@ gameStartField.addEventListener("click", function () {
 /**
  * Generate minesweeper table
  */
+let DevotedCells = new Array()
 let gameMatrix = new Array();
 
 function gameInit(gameLevel) {
@@ -37,11 +38,11 @@ function gameInit(gameLevel) {
             break;
     }
     
+    DevotedCells = []
     for (let i = 0; i < tableRows; i++) {
         let tableRow = document.createElement("tr");
         minesweeperTable.appendChild(tableRow);
         gameMatrix[i] = [];
-
         for (let j = 0; j < tableCols; j++) {
             gameMatrix[i][j] = 0;
             let tableCell = document.createElement("td");
@@ -109,7 +110,7 @@ function generateNumbers() {
 /** 
  * Button click event
  */
-function buttonListener() {
+ function buttonListener() {
     minesweeperTable.querySelectorAll('.minesweeper-button').forEach(minesweeperButton => {
         minesweeperButton.addEventListener("click", function () {
             let currentButton = this;
@@ -137,6 +138,9 @@ function buttonListener() {
                 if(gameMatrix[row][col] > 0) {
                     currentCell.innerHTML = gameMatrix[row][col];
                 }
+                if(gameMatrix[row][col] == 0) {
+                    RemoveEmpty(row,col)
+                }
                 this.remove();
             }
         });
@@ -150,4 +154,31 @@ function buttonListener() {
                 currentButton.classList.add("flag");
         });
     });
+}
+
+
+
+function RemoveEmpty(row, col) {
+    row = Number(row)
+    col = Number(col)
+    DevotedCells.push(String(`${row}'-'${col}`))
+    let minedCell = minesweeperTable.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+    minedCell.removeChild(minedCell.firstChild);
+
+    for(let i = -1; i<2; i++) {
+        for(let j = -1; j<2; j++) {
+            try{
+                if(gameMatrix[row+i][col+j] == 0 && !DevotedCells.includes(String(`${row+i}'-'${col+j}`))) {
+                    RemoveEmpty(row+i, col+j)
+                } else if (gameMatrix[row+i][col+j] >= 0 && !DevotedCells.includes(String(`${row+i}'-'${col+j}`))) {
+                    DevotedCells.push(String(`${row+i}'-'${col+j}`))
+                    let minedCell = minesweeperTable.querySelector(`[data-row="${row+i}"][data-col="${col+j}"]`);
+                    minedCell.innerHTML+=gameMatrix[row+i][col+j]
+                    minedCell.removeChild(minedCell.firstChild);
+                }
+            }
+            catch{}
+        }
+    }
+    return
 }
