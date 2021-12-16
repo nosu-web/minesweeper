@@ -22,7 +22,6 @@ function gameInit(gameLevel) {
 
     switch (gameLevel) {
         case 2:
-            console.log(gameLevel);
             tableRows = tableCols = 16;
             minesMax = 20;
             break;
@@ -134,8 +133,11 @@ function buttonListener() {
                         }
                     }
                 }
-                if(gameMatrix[row][col] > 0) {
+                else if(gameMatrix[row][col] > 0) {
                     currentCell.innerHTML = gameMatrix[row][col];
+                }
+                else {
+                    WaveAlgorithm(Number(row), Number(col));
                 }
                 this.remove();
             }
@@ -150,4 +152,77 @@ function buttonListener() {
                 currentButton.classList.add("flag");
         });
     });
+}
+
+function WaveAlgorithm(x1, y1) {
+    let 
+        range = 0,
+        OldFront = [],
+        NewFront = [],
+        Visited = [];
+        allDirections = [ {dx: 1, dy: 0}, {dx: -1, dy: 0}, {dx: 0, dy: 1}, {dx: 0, dy: -1} ],
+        start = {x: x1, y: y1};
+
+    OldFront.push(start);
+    Visited = Visited.concat(OldFront);
+    while(true)
+    {
+        NewFront = [];
+        for(let p = 0; p < OldFront.length; p++)
+        {
+            let row = OldFront[p].x;
+            let col = OldFront[p].y;
+            for(let k = 0; k < allDirections.length; k++) {
+                let dx = Number(row + allDirections[k].dx);
+                let dy = Number(col + allDirections[k].dy);
+                if (dx >= 0 && dx < tableRows && dy >= 0 && dy < tableCols) {
+                    if (!Contains(Visited, dx, dy)) {
+                        Visited.push({x: dx, y: dy});
+                        let n = CheckCell(dx, dy);
+                        if(n != null) {
+                            NewFront.push(n);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (NewFront.length == 0) {
+            console.log("gg");
+            break; 
+        }
+        OldFront = [].concat(NewFront);
+
+        range++;
+        if (range > 10) {
+            break;
+        }
+    }
+}
+
+function CheckCell(dx, dy) {
+    console.log(dx, dy);
+    let cell = minesweeperTable.querySelector(`[data-row="${dx}"][data-col="${dy}"]`);
+    let val = gameMatrix[dx][dy];
+    if (val == 0) {
+        try{
+            cell.removeChild(cell.firstChild);
+        }
+        catch{}
+        return {x: dx, y: dy};
+    }
+    try{
+        cell.removeChild(cell.firstChild);
+        cell.innerHTML = val;
+    }
+    catch{}
+}
+
+function Contains(arr, x, y) {
+    for(let i = 0; i < arr.length; i++) {
+        if (arr[i].x == x && arr[i].y == y) {
+            return true;
+        }
+    }
+    return false;
 }
