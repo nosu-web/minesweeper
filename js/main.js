@@ -4,7 +4,7 @@
 const tableRows = 9;
 const tableCols = 9;
 
-let minesMax = 1;
+let minesMax = 10;
 minesMaxField = document.querySelector('#minesMax');
 minesMaxField.addEventListener("input", function () {
     minesMax = this.value;
@@ -124,50 +124,28 @@ minesweeperTable.querySelectorAll('.minesweeper-button').forEach(minesweeperButt
     });
 });
 
-
-
+let arr = new Array()
 function RemoveEmpty(row, col) {
     row = Number(row)
     col = Number(col)
+    arr.push(String(`${row}'-'${col}`))
     let minedCell = minesweeperTable.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-    gameMatrix[row][col]=-3
     minedCell.removeChild(minedCell.firstChild);
 
-
-    
-    if(row>0) {
-        if(gameMatrix[row-1][col]==0)
-            RemoveEmpty(row-1, col)
+    for(let i = -1; i<2; i++) {
+        for(let j = -1; j<2; j++) {
+            try{
+                if(gameMatrix[row+i][col+j] == 0 && !arr.includes(String(`${row+i}'-'${col+j}`))) {
+                    RemoveEmpty(row+i, col+j)
+                } else if (gameMatrix[row+i][col+j] >= 0 && !arr.includes(String(`${row+i}'-'${col+j}`))) {
+                    arr.push(String(`${row+i}'-'${col+j}`))
+                    let minedCell = minesweeperTable.querySelector(`[data-row="${row+i}"][data-col="${col+j}"]`);
+                    minedCell.innerHTML+=gameMatrix[row+i][col+j]
+                    minedCell.removeChild(minedCell.firstChild);
+                }
+            }
+            catch{}
+        }
     }
-    if(row<tableRows-1) {
-        if(gameMatrix[row+1][col]==0)
-            RemoveEmpty(row+1, col)
-    }
-    if(col > 0) {
-        if(gameMatrix[row][col-1]==0)
-            RemoveEmpty(row, col-1)
-    }
-    if(col < tableCols-1) {
-        if(gameMatrix[row][col+1]==0)
-            RemoveEmpty(row, col+1)
-    }
-    if(row>0&&col>0) {
-        if(gameMatrix[row-1][col-1]==0)
-            RemoveEmpty(row-1, col-1)
-    }
-    if(row<tableRows-1 && col<tableCols-1) {
-        if(gameMatrix[row+1][col+1]==0)
-            RemoveEmpty(row+1, col+1)
-    }
-    if(row > 0 && col<tableCols-1) {
-        if(gameMatrix[row-1][col+1]==0)
-            RemoveEmpty(row-1, col+1)
-    }
-    if(row<tableRows-1 && col>0) {
-        if(gameMatrix[row+1][col-1]==0)
-            RemoveEmpty(row+1, col-1)
-    }
-
-
     return
 }
