@@ -115,22 +115,23 @@ function DeleteEmptyCells(row, col){
     {
         return;
     }
-    else if(gameMatrix[row][col] > 0)
+    else 
     {
+        checkedCells.add(cell);
         let currentCell = minesweeperTable.querySelector(`[data-row="${row}"][data-col="${col}"]`);
         currentCell.removeChild(currentCell.firstChild);
-        currentCell.innerHTML+=gameMatrix[row][col];
-        return;
-    }
-    else{
-        let currentCell = minesweeperTable.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-        currentCell.removeChild(currentCell.firstChild);
-        for(let i = -1; i < 2; i++){
-            for(let j = -1; j < 2; j++){
-                try{
-                    DeleteEmptyCells(row+i, col+j);
+        if(gameMatrix[row][col] > 0){
+            currentCell.innerHTML+=gameMatrix[row][col];
+            return;
+        }
+        else{
+            for(let i = -1; i < 2; i++){
+                for(let j = -1; j < 2; j++){
+                    try{
+                        DeleteEmptyCells(row+i, col+j);
+                    }
+                    catch{}
                 }
-                catch{}
             }
         }
     }
