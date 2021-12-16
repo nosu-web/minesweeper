@@ -22,7 +22,6 @@ function gameInit(gameLevel) {
 
     switch (gameLevel) {
         case 2:
-            console.log(gameLevel);
             tableRows = tableCols = 16;
             minesMax = 20;
             break;
@@ -120,7 +119,6 @@ function buttonListener() {
                 let col = currentCell.dataset.col;
 
                 /* Check cell for mine */
-                this.remove();
                 if(gameMatrix[row][col] < 0) {
                     currentCell.classList.add("mined");
                     currentCell.classList.add("exploded");
@@ -140,6 +138,7 @@ function buttonListener() {
                 else {
                     WaveAlgorithm(Number(row), Number(col));
                 }
+                this.remove();
             }
         });
         minesweeperButton.addEventListener("contextmenu", function (event) {
@@ -156,45 +155,45 @@ function buttonListener() {
 
 function WaveAlgorithm(x1, y1) {
     let 
-        r = 0,
-        c = 0,
+        range = 0,
         OldFront = [],
         NewFront = [],
         Visited = [];
         allDirections = [ {dx: 1, dy: 0}, {dx: -1, dy: 0}, {dx: 0, dy: 1}, {dx: 0, dy: -1} ],
-        s = {x: x1, y: y1};
+        start = {x: x1, y: y1};
 
-    OldFront.push(s);
+    OldFront.push(start);
     Visited = Visited.concat(OldFront);
-    let t = 0;
     while(true)
     {
         NewFront = [];
-        for(let i = 0; i < OldFront.length; i++)
+        for(let p = 0; p < OldFront.length; p++)
         {
-            console.log(OldFront[i].x, OldFront[i].y);
-            row = Number(OldFront[i].x);
-            col = Number(OldFront[i].y);
+            let row = OldFront[p].x;
+            let col = OldFront[p].y;
             for(let k = 0; k < allDirections.length; k++) {
                 let dx = Number(row + allDirections[k].dx);
                 let dy = Number(col + allDirections[k].dy);
-                if (dx >= 0 && dx < tableRows && dy >= 0 && dy < tableCols && !Contains(Visited, dx, dy)) {
-                    let n = CheckCell(dx, dy);
-                    Visited.push({x: dx, y: dy});
-                    if(n != null) {
-                        NewFront.push(n);
+                if (dx >= 0 && dx < tableRows && dy >= 0 && dy < tableCols) {
+                    if (!Contains(Visited, dx, dy)) {
+                        Visited.push({x: dx, y: dy});
+                        let n = CheckCell(dx, dy);
+                        if(n != null) {
+                            NewFront.push(n);
+                        }
                     }
                 }
             }
         }
+
         if (NewFront.length == 0) {
             console.log("gg");
             break; 
         }
         OldFront = [].concat(NewFront);
-        console.log("Vis:", Visited);
-        t++;
-        if (t > 2) {
+
+        range++;
+        if (range > 10) {
             break;
         }
     }
@@ -220,7 +219,7 @@ function CheckCell(dx, dy) {
 
 function Contains(arr, x, y) {
     for(let i = 0; i < arr.length; i++) {
-        if (arr[i].dx == x && arr[i].dy == y) {
+        if (arr[i].x == x && arr[i].y == y) {
             return true;
         }
     }
