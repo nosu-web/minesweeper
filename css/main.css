@@ -34,3 +34,15 @@
     border: 0px;
     border-radius: 0px;
 }
+.number1{
+background-color:gold;
+}
+.number2{
+    background-color:#00ffbf;
+}
+.number3{
+    background-color:hsl(293, 100%, 50%);
+}
+.number4{
+    background-color:hsl(204, 100%, 50%);
+}
